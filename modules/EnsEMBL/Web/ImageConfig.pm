@@ -59,7 +59,7 @@ sub new {
     species          => $species,
     altered          => [],
     user_track_count => 0,
-    load_threshold   => $hub->species_defs->ENSEMBL_LOAD_THRESHOLD || 20,
+    load_threshold   => $hub->species_defs->ENSEMBL_LOAD_THRESHOLD || 2,
     _tree            => EnsEMBL::Web::Tree->new,
     transcript_types => [qw(transcript alignslice_transcript tsv_transcript gsv_transcript TSE_transcript)],
     _parameters      => { # Default parameters
@@ -652,7 +652,7 @@ sub check_threshold {
 ### @param display String
 ### @return 1 if still OK, 0 if check fails i.e. threshold exceeded
   my ($self, $display) = @_;
-  #warn ">>> DISPLAY $display";
+  warn ">>> DISPLAY $display";
   $display ||= 'off';
   return $display if $display eq 'off';
   ## Track is supposed to be on, so compare with threshold
@@ -684,6 +684,7 @@ sub load_user_tracks {
     next if $entry->{'no_attach'};
     next unless $entry->{'species'} eq $self->{'species'};
    
+    warn ">>> CHECKING URL TRACK ".$entry->{'name'};
     my $display = $self->check_threshold($entry->{'display'});
  
     $url_sources{"url_$entry->{'code'}"} = {
@@ -710,6 +711,7 @@ sub load_user_tracks {
     my $description = 'Data that has been temporarily uploaded to the web server.';
     $description   .= add_links($entry->{'description'}) if $entry->{'description'};
      
+    warn ">>> CHECKING UPLOADED TRACK ".$entry->{'name'};
     my $display = $self->check_threshold($entry->{'display'});
  
     $menu->append($self->create_track("upload_$entry->{'code'}", $entry->{'name'}, {
@@ -775,6 +777,7 @@ sub load_user_tracks {
         my $description = 'Data that has been saved to the web server. ';
         my $extra_desc  = $entry->description;
         $description   .= add_links($extra_desc) if $extra_desc;
+        warn ">>> CHECKING SAVED TRACK ".$entry->name;
         my $display     = $self->check_threshold($entry->display);
         $menu->append($self->create_track("upload_".$entry->code, $entry->name, {
             external        => 'user',
@@ -1068,9 +1071,6 @@ sub _add_trackhub_tracks {
     }
     elsif (!$config->{'on_off'} && !$track->{'on_off'}) {
       $on_off = 'on';
-    }
-    elsif ($self->check_threshold($on_off) eq 'off') {
-      $on_off = 'off';
     }
 
     my $ucsc_display  = $config->{'visibility'} || $track->{'visibility'};
@@ -1435,6 +1435,7 @@ sub _add_flat_file_track {
 
   my ($strand, $renderers, $default) = $self->_user_track_settings($options{'style'}, $options{'format'});
 
+  warn ">>> CHECKING FLATFILE TRACK ".$name;
   $options{'display'} = $self->check_threshold($options{'display'});
 
   my $track = $self->create_track($key, $name, {
@@ -1486,7 +1487,8 @@ sub _add_file_format_track {
       $desc = $args{'description'};
     }
   }
- 
+  my $thing = $args{'format'};
+  warn ">>> CHECKING $thing TRACK"; 
   $args{'options'}->{'display'} = $self->check_threshold($args{'options'}->{'display'});
   $self->generic_add($menu, undef, $args{'key'}, {}, {
     display     => 'off',
