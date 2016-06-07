@@ -76,7 +76,7 @@ sub content {
 
   ## Add user tracks if turned on
   my @pointers;
-  my $user_features = $config->create_user_features;
+  my ($user_features) = $config->load_user_track_data;
   if (keys %$user_features) {
     @pointers = $self->create_user_pointers($image, $user_features);
   }
@@ -155,6 +155,26 @@ sub stats_table {
 sub legend {
   my $self = shift;
   return;
+}
+
+sub buttons {
+  my $self    = shift;
+  my $hub     = $self->hub;
+  my @buttons;
+
+  my $params = {
+                'type'    => 'UserData',
+                'action'  => 'FeatureView',
+                };
+
+  push @buttons, {
+                    'url'     => $hub->url($params),
+                    'caption' => 'Add features',
+                    'class'   => 'add',
+                    'modal'   => 1
+                    };
+
+  return @buttons;
 }
 
 1;

@@ -37,7 +37,7 @@ sub populate_tree {
   my $config_menu = $self->create_submenu('Configurations', 'Manage Configurations');
 
   ## Upload "wizard"
-  $data_menu->append($self->create_node('SelectFile',     'Add your data', [qw(select_file  EnsEMBL::Web::Component::UserData::SelectFile)]));
+  $data_menu->append($self->create_node('SelectFile',     'Add your data', [qw(select_file  EnsEMBL::Web::Component::UserData::SelectFile)], {'no_menu_entry' => 1}));
   $data_menu->append($self->create_node('MoreInput',      '',              [qw(more_input   EnsEMBL::Web::Component::UserData::MoreInput)]));
   $data_menu->append($self->create_node('UploadFeedback', '',              [qw(feedback     EnsEMBL::Web::Component::UserData::UploadFeedback   parsed EnsEMBL::Web::Component::UserData::UploadParsed)]));
   $data_menu->append($self->create_node('RemoteFeedback', '',              [qw(feedback     EnsEMBL::Web::Component::UserData::RemoteFeedback   parsed EnsEMBL::Web::Component::UserData::UploadParsed)]));
@@ -48,7 +48,7 @@ sub populate_tree {
   $data_menu->append($self->create_node('RefreshUpload',   '', [], { command => 'EnsEMBL::Web::Command::UserData::RefreshUpload'   }));
   $data_menu->append($self->create_node('CheckShare',   '', [], { command => 'EnsEMBL::Web::Command::UserData::CheckShare'   }));
   ## Data management
-  $data_menu->append($self->create_node('ManageData',            'Manage Data', [qw(
+  $data_menu->append($self->create_node('ManageData',            'Custom tracks', [qw(
                     manage_remote EnsEMBL::Web::Component::UserData::ManageData
                     select_file   EnsEMBL::Web::Component::UserData::SelectFile
     )]));
@@ -72,8 +72,10 @@ sub populate_tree {
   $data_menu->append($self->create_node('Unshare',     '', [], { command => 'EnsEMBL::Web::Command::UnshareRecord'        }));
   
   ## FeatureView 
-  $data_menu->append($self->create_node('FeatureView', 'Features on Karyotype', [qw(featureview EnsEMBL::Web::Component::UserData::FeatureView)], { availability => @{$sd->ENSEMBL_CHROMOSOMES} }));
-  
+  if ($self->hub->action eq 'FeatureView') {
+    $data_menu->append($self->create_node('FeatureView', 'Features on Karyotype', [qw(featureview EnsEMBL::Web::Component::UserData::FeatureView)], { availability => @{$sd->ENSEMBL_CHROMOSOMES}}));
+  }
+
   $data_menu->append($self->create_node('FviewRedirect', '', [], { command => 'EnsEMBL::Web::Command::UserData::FviewRedirect'})); 
   
   ## Configuration management
@@ -85,35 +87,6 @@ sub populate_tree {
   
   $config_menu->append($self->create_node('ModifyConfig', '', [], { command => 'EnsEMBL::Web::Command::UserData::ModifyConfig' }));
  
-############### OLD TOOLS - DUE TO BE PHASED OUT ############################################## 
-  ## Data conversion - show the old tools interface only if new ones are not available
-  unless ($sd->ENSEMBL_VEP_ENABLED && $sd->ENSEMBL_AC_ENABLED && $sd->ENSEMBL_IDM_ENABLED) {
-    my $tools_menu = $self->create_submenu('Conversion', 'Online Tools');
-
-    unless ($sd->ENSEMBL_VEP_ENABLED) {
-      $tools_menu->append($self->create_node('UploadVariations', 'Variant Effect Predictor', [qw(upload_snps EnsEMBL::Web::Component::UserData::UploadVariations)]));
-    }
-
-    unless ($sd->ENSEMBL_AC_ENABLED) {
-      $tools_menu->append($self->create_node('SelectFeatures',    'Assembly Converter',       [qw(select_features   EnsEMBL::Web::Component::UserData::SelectFeatures)]));
-      $tools_menu->append($self->create_node('PreviewConvert',    '',                         [qw(conversion_done   EnsEMBL::Web::Component::UserData::PreviewConvert)]));
-    }
-
-    unless ($sd->ENSEMBL_IDM_ENABLED) {
-      $tools_menu->append($self->create_node('UploadStableIDs',   'ID History Converter',     [qw(upload_stable_ids EnsEMBL::Web::Component::UserData::UploadStableIDs)]));
-      $tools_menu->append($self->create_node('PreviewConvertIDs', '',                         [qw(conversion_done   EnsEMBL::Web::Component::UserData::PreviewConvertIDs)]));
-      $tools_menu->append($self->create_node('SelectOutput',      '',                         [qw(select_output     EnsEMBL::Web::Component::UserData::SelectOutput)]));
-    }
-
-    $tools_menu->append($self->create_node('SNPConsequence',  '', [], { command => 'EnsEMBL::Web::Command::UserData::SNPConsequence'  }));
-    $tools_menu->append($self->create_node('CheckConvert',    '', [], { command => 'EnsEMBL::Web::Command::UserData::CheckConvert'    }));
-    $tools_menu->append($self->create_node('ConvertFeatures', '', [], { command => 'EnsEMBL::Web::Command::UserData::ConvertFeatures' }));
-    $tools_menu->append($self->create_node('MapIDs',          '', [], { command => 'EnsEMBL::Web::Command::UserData::MapIDs'          }));
-    $tools_menu->append($self->create_node('DropUpload',      '', [], { command => 'EnsEMBL::Web::Command::UserData::DropUpload'      }));
-  }
-  $data_menu->append($self->create_node('IDConversion',          '',            [qw(idmapper      EnsEMBL::Web::Component::UserData::IDmapper)]));
-  $data_menu->append($self->create_node('ConsequenceCalculator', '',            [qw(consequence   EnsEMBL::Web::Component::UserData::ConsequenceTool)])); 
-###############################################################
 }
 
 1;

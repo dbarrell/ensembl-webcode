@@ -78,7 +78,7 @@ sub render {
   if ($sd->ENSEMBL_AC_ENABLED) {
     my $link = $hub->url({'species' => $sp, qw(type Tools action AssemblyConverter)});
     $table->add_row({
-      'name'  => sprintf('<b><a class="nodeco" href="%s">Assembly converter</a></b>', $link),
+      'name'  => sprintf('<b><a class="nodeco" href="%s">Assembly Converter</a></b>', $link),
       'desc'  => "Map (liftover) your data's coordinates to the current assembly.",
       'tool'  => sprintf('<a href="%s" class="nodeco"><img src="%s16/tool.png" alt="Tool" title="Go to online tool" /></a>', $link, $img_url),
       'limit' => $tools_limit,
@@ -91,12 +91,38 @@ sub render {
   if ($sd->ENSEMBL_IDM_ENABLED) {
     my $link = $hub->url({'species' => $sp, qw(type Tools action IDMapper)});
     $table->add_row({
-      'name'  => sprintf('<b><a class="nodeco" href="%s">ID History converter</a></b>', $link),
+      'name'  => sprintf('<b><a class="nodeco" href="%s">ID History Converter</a></b>', $link),
       'desc'  => 'Convert a set of Ensembl IDs from a previous release into their current equivalents.',
       'tool'  => sprintf('<a href="%s" class="nodeco"><img src="%s16/tool.png" alt="Tool" title="Go to online tool" /></a>', $link, $img_url),
       'limit' => $tools_limit,
       'code'  => sprintf('<a href="https://github.com/Ensembl/ensembl-tools/tree/release/%s/scripts/id_history_converter" rel="external" class="nodeco"><img src="%s16/download.png" alt="Download" title="Download Perl script" /></a>', $sd->ENSEMBL_VERSION, $img_url),
       'docs'  => '',
+    });
+  }
+
+  ## File chameleon
+  if ($sd->ENSEMBL_FC_ENABLED) {
+    my $link = $hub->url({'species' => $sp, qw(type Tools action FileChameleon)});
+    $table->add_row({
+      'name'  => sprintf('<b><a class="nodeco" href="%s">File Chameleon</a></b>', $link),
+      'desc'  => "Convert Ensembl files for use with other analysis tools",
+      'tool'  => sprintf('<a href="%s" class="nodeco"><img src="%s16/tool.png" alt="Tool" title="Go to online tool" /></a>', $link, $img_url),
+      'limit' => $tools_limit,
+      'code'  => '',
+      'docs'  => '',
+    });
+  }
+
+  ## Allele frequency
+  if ($sd->ENSEMBL_AF_ENABLED) {
+    my $link = $hub->url({'species' => $sp, qw(type Tools action AlleleFrequency)});
+    $table->add_row({
+      'name'  => sprintf('<b><a class="nodeco" href="%s">Allele frequency calculator</a></b>', $link),
+      'desc'  => "This tool calculates population-wide allele frequency for sites within the chromosomal region defined from a VCF file and populations defined in a sample panel file.",
+      'tool'  => sprintf('<a href="%s" class="nodeco"><img src="%s16/tool.png" alt="Tool" title="Go to online tool" /></a>', $link, $img_url),
+      'limit' => $tools_limit,
+      'code'  => '',
+      'docs'  => sprintf('<a href="/info/docs/tools/allelefrequency/index.html"><img src="%s16/info.png" alt="Documentation" /></a>', $img_url),
     });
   }
 

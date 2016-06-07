@@ -378,7 +378,16 @@ sub content {
       order       => 14,
     }); 
 
+    $params->{'align_type'} = 'msa_dna';
+    $self->add_entry({
+      type        => 'Export sub-tree',
+      label       => 'Sequences',
+      link        => $hub->url($params),
+      link_class  => 'modal_link',
+      order       => 15,
+    }); 
 
+    # Wasabi
     # Get wasabi files if found in session store
     my $gt_id               = $node->tree->stable_id;
     my $wasabi_session_key  = $gt_id . "_" . $node_id;

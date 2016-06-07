@@ -182,8 +182,7 @@ sub add_userdata_icon {
   my $hub       = $self->hub;
   my $session = $hub->session;
 
-  my $has_data = !!grep $session->get_data(type => $_), qw(upload url);
-  my $icon_key = $has_data ? 'userdata_manage' : 'userdata_add';
+  my $icon_key = 'userdata';
   my $data_url  = $hub->url({ type => 'UserData', action => 'ManageData', function => undef });
   return {
           'href'      => $data_url,
@@ -277,11 +276,13 @@ sub add_image_export_icon {
 ### @return Hashref of icon parameters
   my $self = shift;
   my $hub  = $self->hub;
+
   my $params = {
-                'type' => 'ImageExport',
-                'action' => 'ImageFormats',
-                'data_type' => $hub->type,
-                'component' => $self->component,
+                'type'        => 'ImageExport',
+                'action'      => 'ImageFormats',
+                'data_type'   => $hub->type,
+                'data_action' => $hub->action,
+                'component'   => $self->component,
                 };
 
   foreach (@{$self->{'export_params'}||[]}) {
