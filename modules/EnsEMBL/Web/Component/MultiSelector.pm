@@ -50,9 +50,8 @@ sub content {
 sub _content_li {
   my ($self,$class,$content) = @_;
   return qq(
-    <li class="$class">
-      <span class="switch"></span>
-      <span>$content</span>
+    <li>
+      <span class="$class">$content</span>
     </li>);
 }
 
@@ -66,13 +65,13 @@ sub content_ajax {
   my $url          = $self->{'url'} || $hub->url({ function => undef, align => $hub->param('align') }, 1);
   my $extra_inputs = join '', map sprintf('<input type="hidden" name="%s" value="%s" />', encode_entities($_), encode_entities($url->[1]{$_})), sort keys %{$url->[1]};
   my $select_by    = join '', map sprintf('<option value="%s">%s</option>', @$_), @{$self->{'select_by'} || []};
-     $select_by    = qq{<div class="select_by"><h2>Select by type:</h2><select><option value="">----------------------------------------</option>$select_by</select></div>} if $select_by;
+     $select_by    = qq{<div class="select_by"><h2>Select by biotype:</h2><select>$select_by</select></div>} if $select_by;
   my ($exclude_html,$include_html);
 
   foreach my $category ((@all_categories,undef)) {
     # The data
-    my ($include_list,$exclude_list,@all);
-    @all = sort { ($included{$a} <=> $included{$b}) || ($all{$a} cmp $all{$b}) } keys %all;
+    my ($include_list,$select_species_list,@all);
+    @all = sort { $all{$a} cmp $all{$b} } keys %all;
     foreach my $key (@all) {
       if(defined $category) {
         my $my_category = ($self->{'category_map'}||{})->{$key};
@@ -87,11 +86,7 @@ sub content_ajax {
       }
 
       my $fragment = $self->_content_li($key,$all{$key});
-      if($included{$key}) {
-        $include_list .= $fragment;
-      } else {
-        $exclude_list .= $fragment;
-      }
+      $select_species_list .= $fragment;
     }
 
     # The heading
@@ -104,17 +99,13 @@ sub content_ajax {
 
     # Do it
     my $catdata = $category||'';
-    next unless $exclude_list or $include_list or $category;
+    next unless $select_species_list or $include_list or $category;
     $exclude_html .= qq(
-      <h2>$exclude_title (<span class="_count">0</span>)</h2>
-      <ul class="excluded" data-category="$catdata">
-        $exclude_list
-      </ul>
-    );
-    $include_html .= qq(
-      <h2>$include_title (<span class="_count">0</span>)</h2>
-      <ul class="included" data-category="$catdata">
-        $include_list
+      <div class="panel_title">
+        <h2>$exclude_title <span class="count">0</span> </h2>
+      </div>
+      <ul class="article_style" data-category="$catdata">
+        $select_species_list
       </ul>
     );
   }
@@ -139,22 +130,18 @@ sub content_ajax {
       <div class="multi_selector_list _unselected_species">
         %s
       </div>
-      <div class="multi_selector_list _selected_species">
-        %s
-      </div>
       <p class="invisible">.</p>
     </div>',
     $select_by,
     $hint,
     $url->[0],
     $extra_inputs,
-    $exclude_html,
-    $include_html
+    $exclude_html
   );
   
   my $param_mode = $self->{'param_mode'};
   $param_mode ||= 'multi';
- 
+
   return $self->jsonify({
     content   => $content,
     panelType => $self->{'panel_type'},

@@ -45,12 +45,13 @@ Ensembl.Panel.MultiSpeciesSelector = Ensembl.Panel.MultiSelector.extend({
         species.push('s' + (i + 1) + '=' + this.selection[i]);
       }
     }
-    
+
     if (this.selection.join(',') !== this.initialSelection) {
       $.ajax({
         url: '/' + Ensembl.species + '/Ajax/multi_species?' + species.join(';'),
         context: this,
         complete: function () {
+          console.log(this.elLk.form.attr('action') + '?' + Ensembl.cleanURL(this.elLk.form.serialize() + ';' + species.join(';') + ';' + urlParams.join(';')))
           Ensembl.redirect(this.elLk.form.attr('action') + '?' + Ensembl.cleanURL(this.elLk.form.serialize() + ';' + species.join(';') + ';' + urlParams.join(';')));
         }
       });

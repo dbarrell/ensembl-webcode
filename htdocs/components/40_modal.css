@@ -79,7 +79,7 @@ body.ie6 #modal_panel .modal_title .modal_close { background-image: url(/i/cp_cl
 .modal_content                   { position: absolute; height: 100%; width: 100%; overflow: auto; border: solid [[PANEL_TEXT]]; border-width: 0 1px 1px; background-color: [[PANEL_BG]]; }
 .modal_content .panel            { padding: 0; margin: 0; }
 .modal_content .panel .content   { padding: 12px 12px 4px; margin: 0; }
-.modal_content .panel h2         { border-bottom: 1px solid [[PANEL_BORDER]]; padding-bottom: 2px; }
+.modal_content .panel h2         { border-bottom: 1px solid [[PANEL_BORDER]]; padding-bottom: 8px;}
 .modal_content .panel div.error,
 .modal_content .panel div.warning,
 .modal_content .panel div.info,
@@ -185,30 +185,75 @@ body.ie7 #modal_panel .fixed_width .modal_wrapper .panel { margin-left: 229px; }
 
 /* multi selectors */
 
-.modal_content .multi_selector_list                            { width: 48%; font-weight: normal; float: left; margin: 0 0.5%; }
+.modal_content .multi_selector_list                            { font-weight: normal; margin: 0 0.5%; }
 .modal_content .multi_selector_list_wide                       { width: 100%; }
-.modal_content .multi_selector_list ul                         { padding: 0; margin-left: 5px; margin-right: 5px; list-style: none; }
-.modal_content .multi_selector_list li                         { position: relative; height: 22px; padding-left: 10px; list-style-image: none; cursor: pointer; clear: both; }
-.modal_content .multi_selector_list ul.included li             { background-color: [[TINT_BG]]; color: [[CONTRAST_TEXT]]; border: 1px solid [[TINT_BORDER]]; }
+/*.modal_content .multi_selector_list ul                         { padding: 0; margin-left: 5px; margin-right: 5px; list-style: none; }*/
+/*.modal_content .multi_selector_list li                         { position: relative; height: 22px; padding-left: 10px; list-style-image: none; cursor: pointer; clear: both; }*/
+/*.modal_content .multi_selector_list ul.included li             { background-color: [[TINT_BG]]; color: [[CONTRAST_TEXT]]; border: 1px solid [[TINT_BORDER]]; }
 .modal_content .multi_selector_list ul.excluded li             { background-color: #EEE; color: [[CONTRAST_TEXT]]; border: 1px solid [[NEUTRAL_BORDER]]; }
 .modal_content .multi_selector_list ul li span                 { position: absolute; left: 28px; top: 3px; }
 .modal_content .multi_selector_list ul li span.switch          { height: 16px; width: 16px; background-repeat: no-repeat; background-position: top left; left: 6px; }
 .modal_content .multi_selector_list ul.included li span.switch { background-image: url(/i/16/minus-button.png); }
 .modal_content .multi_selector_list ul.excluded li span.switch { background-image: url(/i/16/plus-button.png); }
+*/
+
+.modal_content .multi_selector_list .included                  { background-color: [[TINT_BG]]; color: [[CONTRAST_TEXT]]; border: 1px solid [[TINT_BORDER]]; }
+
 
 .modal_content .multi_selector_hint                            { margin: 16px; }
 
 .modal_content .select_by_group_div                            { display: flex; justify-content: flex-start; align-items: center; }
 .modal_content .select_by                                      { margin: 12px 16px 16px; min-width: 200px;}
-.modal_content .select_by h2                                   { border-bottom: 1px solid [[PANEL_BORDER]]; padding-bottom: 2px; }
+.modal_content .select_by .title                               { border-bottom: 1px solid [[PANEL_BORDER]]; padding-bottom: 2px; }
+.modal_content .select_by h2                                   { padding-bottom: 8px; }
 .modal_content .select_by select                               { width: 100%; }
 
-@media screen and (max-width: 640px) {
-  .modal_content .select_by_group_div {
-    display: block;
-  }  
+.modal_content .multi_selector_list span.count {
+  font-size: 10px;
+  position: relative;
+  top: -8px;
+  padding: 1px 3px;  
+  background-color: [[TINT_BG]]; 
+  color: [[CONTRAST_TEXT]]; 
+  border: 1px solid [[TINT_BORDER]]; 
+}
+.modal_content .multi_selector_list ul                         { list-style: none; padding: 0px;}
+.modal_content .multi_selector_list li { 
+  padding: 4px 4px 4px 24px; 
+  margin: 0 0 8px 0px; 
+  background-color: whitesmoke; 
+  border: 1px solid aliceblue; 
+  list-style-image: none;
+  -webkit-column-break-inside: avoid; /* Chrome, Safari */
+  break-inside: avoid-column;         /* IE 11 */
+  -moz-column-break-inside:avoid;
+  cursor: pointer;
+}
+.modal_content .multi_selector_list li.selected {
+  background-image: url(/i/16/check.png); 
+  background-repeat: no-repeat; 
+  background-position: 4px center; 
+  background-size: 16px; 
+  background-color: [[TINT_BG]]; 
+  color: [[CONTRAST_TEXT]]; 
+  border: 1px solid [[TINT_BORDER]]; 
 }
 
+.article_style {
+      -webkit-columns: 4 300px;
+         -moz-columns: 4 300px;
+              columns: 4 300px;
+  -webkit-column-rule: 1px dotted #ddd;
+     -moz-column-rule: 1px dotted #ddd;
+          column-rule: 1px dotted #ddd;
+           column-gap: 48px;
+
+}
+
+@media screen and (max-width: 640px) {
+  .modal_content .select_by_group_div { display: block; }
+  /*.modal_content .multi_selector_list { width: 100%; }*/
+}
 /* cloud multiselector */
 
 .modal_content .cloud_multi_selector_list                      { width: 100%; }

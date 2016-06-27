@@ -115,10 +115,11 @@ Ensembl.Panel.ModalContainer = Ensembl.Panel.Overlay.extend({
     
     this.elLk.caption.html('');
     this.hideOverlay();
-    
     if ((escape !== true && !Ensembl.EventManager.trigger('updateConfiguration') && (this.pageReload || this.sectionReload.count)) || this.pageReload === 'force') {
+      console.log('hide1')
       this.setPageReload(false, true);
     } else if ($('.modal_reload', this.el).length) {
+      console.log('hide2')
       this.setPageReload(false, true, true);
     }
   },

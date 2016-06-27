@@ -29,7 +29,7 @@ sub _init {
 
   $self->{'link_text'}       = 'Select species or regions';
   $self->{'included_header'} = 'Selected species or regions';
-  $self->{'excluded_header'} = 'Unselected species or regions';
+  $self->{'excluded_header'} = 'Select species or regions';
   $self->{'panel_type'}      = 'MultiSpeciesSelector';
   $self->{'url_param'}       = 's';
   $self->{'rel'}             = 'modal_select_species_or_regions';
