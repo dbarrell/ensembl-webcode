@@ -34,7 +34,7 @@ sub content {
 
   my $hub              = $self->hub;
   my $image_width      = $self->image_width . 'px';
-  my $url              = $hub->url({'type' => 'Location', 'action' => 'View'});
+  my $url              = $hub->url({'type' => 'Location', 'action' => 'View', 'expand' => 1});
 
   return qq{
       <div class="navbar print_hide" style="width:$image_width">

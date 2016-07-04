@@ -38,8 +38,15 @@ sub content {
   my $image_width = $self->image_width;
   
   return $self->_warning('Region too large', '<p>The region selected is too large to display in this view - use the navigation above to zoom in...</p>') if $object->length > $threshold;
-  
-  my $slice        = $object->slice;
+  my $slice;
+  if ($hub->referer->{params}->{'expand'}->[0]) {
+    my $padding = $object->get_image_padding();
+    $slice = $object->slice->expand($padding->{flank5}, $padding->{flank3});
+  }
+  else {
+    $slice = $object->slice;
+  }
+
   my $length       = $slice->end - $slice->start + 1;
   my $image_config = $hub->get_imageconfig('contigviewbottom');
   

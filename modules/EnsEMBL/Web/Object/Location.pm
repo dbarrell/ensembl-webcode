@@ -146,6 +146,16 @@ sub caption {
 sub centrepoint      { return ( $_[0]->Obj->{'seq_region_end'} + $_[0]->Obj->{'seq_region_start'} ) / 2; }
 sub length           { return   $_[0]->Obj->{'seq_region_end'} - $_[0]->Obj->{'seq_region_start'} + 1; }
 
+sub get_image_padding {
+  my $self = shift;
+  my ($seq_region_name, $s, $e, $strand) = $self->param('r') =~ /^([^:]+):(-?\w+\.?\w*)-(-?\w+\.?\w*)(?::(-?\d+))?/;
+  # Adding flanking region to 5' and 3' ends
+  my $padding = {};
+  $padding->{flank5} = ($s && $e) ? int(($e - $s) * $SiteDefs::FLANK5_PERC) : 0;
+  $padding->{flank3} = ($s && $e) ? int(($e - $s) * $SiteDefs::FLANK3_PERC) : 0;
+  return $padding;
+}
+
 sub slice {
   my $self = shift;
   $self->Obj->{'slice'} ||= $self->database('core', $self->real_species)->get_SliceAdaptor->fetch_by_region(map $self->$_, qw(seq_region_type seq_region_name seq_region_start seq_region_end seq_region_strand));

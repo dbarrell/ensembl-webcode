@@ -88,7 +88,7 @@ sub createObjects {
     next unless $species && $r;
     
     $self->__set_species($species);
-    
+
     my ($seq_region_name, $s, $e, $strand) = $r =~ /^([^:]+):(-?\w+\.?\w*)-(-?\w+\.?\w*)(?::(-?\d+))?/;
     $s = 1 if $s < 1;
     
@@ -121,9 +121,11 @@ sub createObjects {
     
     eval { $slice = $self->slice_adaptor->fetch_by_region(undef, $chr, $s, $e, $strand); };
     next if $@;
-    
+
+    # Get image left and right padding
+    my $padding = $object->get_image_padding();
     push @slices, {
-      slice         => $slice,
+      slice         => $slice->expand($padding->{flank5}, $padding->{flank3}),
       species       => $species,
       target        => $inputs{$_}->{'chr'},
       species_check => $species eq $hub->species ? join('--', grep $_, $species, $inputs{$_}->{'chr'}) : $species,
